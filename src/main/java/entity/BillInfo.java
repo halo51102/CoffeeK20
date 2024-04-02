@@ -18,4 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BillInfo implements Serializable {
     private int id;
+    private int id_bill;
+    private int id_food;
+    private int count;
 }

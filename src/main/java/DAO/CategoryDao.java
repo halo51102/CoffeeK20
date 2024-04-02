@@ -45,7 +45,7 @@ public class CategoryDao implements CategoryRepository {
     public Category findByName(String name) {
         Category c = null;
         try {
-            String sql = "select * from FoodCategory where name = '?'";
+            String sql = "select * from FoodCategory where name = ?";
 
             ps = conn.prepareStatement(sql);
             ps.setString(1, name);

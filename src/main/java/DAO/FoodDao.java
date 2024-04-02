@@ -4,6 +4,7 @@
  */
 package DAO;
 
+import entity.Category;
 import entity.Food;
 import entity.Table;
 import java.sql.Connection;
@@ -47,4 +48,42 @@ public class FoodDao implements FoodRepository {
         return list;
     }
 
+    @Override
+    public Food findByName(String name) {
+        Food c = null;
+        try {
+            String sql = "select * from Food where name = ?";
+
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, name);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                c = new Food(rs.getInt("id"), rs.getString("name"),rs.getInt("idCategory"),rs.getInt("price"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return c;
+    }
+
+    @Override
+    public Food findById(int id) {
+        Food c = null;
+        try {
+            String sql = "select * from Food where id = ?";
+
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                c = new Food(rs.getInt("id"), rs.getString("name"),rs.getInt("idCategory"),rs.getInt("price"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return c;
+    }
+    
 }

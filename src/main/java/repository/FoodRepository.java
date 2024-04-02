@@ -13,4 +13,6 @@ import java.util.List;
  */
 public interface FoodRepository {
     List<Food> findByCategory(int cId);
+    Food findByName(String name);
+    Food findById(int id);
 }
