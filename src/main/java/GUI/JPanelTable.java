@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.Color;
+import javax.swing.JFrame;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -12,13 +13,12 @@ import java.awt.Color;
  * @author Admin
  */
 public class JPanelTable extends javax.swing.JPanel {
-
     /**
      * Creates new form Table
      * @param name
      * @param status
      */
-    public JPanelTable(String name, String status) {
+    public JPanelTable(String name, String status, JFrame parent) {
         initComponents();
         jLabel1.setText(name);
         if(!"trống".equals(status)){
@@ -39,6 +39,17 @@ public class JPanelTable extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
 
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                formMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                formMouseExited(evt);
+            }
+        });
 
         jLabel1.setText("text");
 
@@ -59,6 +70,19 @@ public class JPanelTable extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseEntered
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_formMouseEntered
+
+    private void formMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formMouseExited
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

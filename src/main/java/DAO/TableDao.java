@@ -45,5 +45,25 @@ public class TableDao implements TableRepository {
         }
         return list;
     }
-    
+
+    @Override
+    public Table findByName(String name) {
+        Table c = null;
+        try {
+            String sql = "select * from tableFood where name = ?";
+
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, name);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                c = new Table(rs.getInt("id"),rs.getString("name"),rs.getString("status"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return c;
+    }
+
+   
 }

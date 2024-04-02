@@ -4,21 +4,35 @@
  */
 package GUI;
 
+import java.awt.Color;
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.border.Border;
+
 /**
  *
  * @author Admin
  */
 public class JPanelFood extends javax.swing.JPanel {
 
+    Action action;
+
     /**
      * Creates new form JPanelFood
+     *
      * @param name
      * @param price
      */
-    public JPanelFood(String name, int price) {
+    public JPanelFood(String name, int price, JFrame parent, Action action) {
         initComponents();
+        this.action = action;
         jLabel2.setText(name);
         jLabel3.setText(String.valueOf(price));
+    }
+
+    public interface Action {
+
+        public void action(String name);
     }
 
     /**
@@ -33,6 +47,18 @@ public class JPanelFood extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                formMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                formMouseExited(evt);
+            }
+        });
 
         jLabel1.setText("jLabel1");
 
@@ -67,6 +93,25 @@ public class JPanelFood extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        // TODO add your handling code here:
+        String name = jLabel2.getText();
+        Border border = BorderFactory.createLineBorder(Color.GREEN, 1);
+        this.setBorder(border);
+        action.action(name);
+    }//GEN-LAST:event_formMouseClicked
+
+    private void formMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseEntered
+        // TODO add your handling code here:
+        Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
+        this.setBorder(border);
+    }//GEN-LAST:event_formMouseEntered
+
+    private void formMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseExited
+        // TODO add your handling code here:
+        this.setBorder(null);
+    }//GEN-LAST:event_formMouseExited
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
