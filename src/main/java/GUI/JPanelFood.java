@@ -15,24 +15,26 @@ import javax.swing.border.Border;
  */
 public class JPanelFood extends javax.swing.JPanel {
 
-    Action action;
+    Callback action;
 
     /**
      * Creates new form JPanelFood
      *
      * @param name
      * @param price
+     * @param parent
+     * @param action
      */
-    public JPanelFood(String name, int price, JFrame parent, Action action) {
+    public JPanelFood(String name, int price, JFrame parent, Callback action) {
         initComponents();
         this.action = action;
         jLabel2.setText(name);
         jLabel3.setText(String.valueOf(price));
     }
 
-    public interface Action {
+    public interface Callback {
 
-        public void action(String name);
+        public void actionClickFood(String name);
     }
 
     /**
@@ -99,7 +101,7 @@ public class JPanelFood extends javax.swing.JPanel {
         String name = jLabel2.getText();
         Border border = BorderFactory.createLineBorder(Color.GREEN, 1);
         this.setBorder(border);
-        action.action(name);
+        action.actionClickFood(name);
     }//GEN-LAST:event_formMouseClicked
 
     private void formMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseEntered

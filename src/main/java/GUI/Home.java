@@ -8,7 +8,7 @@ import DAO.BillDao;
 import DAO.CategoryDao;
 import DAO.FoodDao;
 import DAO.TableDao;
-import GUI.JPanelFood.Action;
+import GUI.JPanelFood.Callback;
 import entity.Bill;
 import entity.BillInfo;
 import entity.Category;
@@ -30,7 +30,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Admin
  */
-public class Home extends javax.swing.JFrame implements JPanelFood.Action {
+public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPanelTable.Callback {
 
     CategoryDao categoryDao;
     Category category;
@@ -48,6 +48,7 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Action {
     BillInfo billInfo;
     BillDao billDao;
     List<BillInfo> billInfoList;
+    
 
     /**
      * Creates new form Home
@@ -59,9 +60,18 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Action {
         this.foodDao = new FoodDao();
         this.billDao = new BillDao();
         this.categoryList = categoryDao.getAll();
-        this.tableList = tableDao.getAll();
 
         loading();
+    }
+
+    private void caculateTotal() {
+        int tempTotal = billDao.caculateBill(bill.getId());
+        jLabelTempTotal.setText(String.valueOf(tempTotal));
+        int finalTotal = tempTotal - tempTotal*jSlider1.getValue()/100;
+        jLabelTotal.setText(String.valueOf(finalTotal));
+    }
+    public interface CallbackTable{
+        public void callbackTable();
     }
 
     /**
@@ -77,24 +87,25 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Action {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jScrollPaneTable = new javax.swing.JScrollPane();
-        jListTable = new javax.swing.JList<>();
         jScrollPane5 = new javax.swing.JScrollPane();
         jListCategory = new javax.swing.JList<>();
         jScrollPaneFood = new javax.swing.JScrollPane();
         jPanel7 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
         jLabelTotal = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabelTempTotal = new javax.swing.JLabel();
+        jSlider1 = new javax.swing.JSlider();
+        jButtonCheckOut = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
         jTableOrder = new javax.swing.JTable();
-        jSeparator1 = new javax.swing.JSeparator();
-        jLabel7 = new javax.swing.JLabel();
+        jLabelTableName = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -117,36 +128,28 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Action {
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
-        jScrollPaneTable.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPaneTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jScrollPaneTableMouseClicked(evt);
             }
         });
 
-        jListTable.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jListTable.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jListTable.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                jListTableValueChanged(evt);
-            }
-        });
-        jScrollPaneTable.setViewportView(jListTable);
-
         jListCategory.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jListCategory.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
+        });
+        jListCategory.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jListCategoryMouseClicked(evt);
+            }
         });
         jListCategory.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -155,55 +158,84 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Action {
         });
         jScrollPane5.setViewportView(jListCategory);
 
-        jLabel3.setText("Mã giảm giá");
+        jLabel3.setText("Giảm giá");
 
-        jTextField1.setText("jTextFieldVoucher");
-
-        jLabel4.setText("Thông tin giảm giá");
-
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setText("Tổng tiền");
 
         jLabel6.setText("VNĐ");
 
-        jButton4.setText("THANH TOÁN");
+        jLabelTotal.setText("x");
 
-        jLabelTotal.setText("jLabelTotal");
+        jLabel4.setText("Tổng order");
+
+        jLabel7.setText("VNĐ");
+
+        jLabelTempTotal.setText("x");
+
+        jSlider1.setMajorTickSpacing(20);
+        jSlider1.setMinorTickSpacing(10);
+        jSlider1.setPaintLabels(true);
+        jSlider1.setPaintTicks(true);
+        jSlider1.setSnapToTicks(true);
+        jSlider1.setValue(0);
+        jSlider1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSlider1StateChanged(evt);
+            }
+        });
+
+        jButtonCheckOut.setText("THANH TOÁN");
+        jButtonCheckOut.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonCheckOutMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addComponent(jLabel5)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabelTotal)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6))
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jLabelTotal)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel6))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jLabelTempTotal)
+                        .addGap(28, 28, 28)
+                        .addComponent(jLabel7))))
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addComponent(jLabel4)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jButtonCheckOut, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabelTempTotal))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addGap(55, 55, 55)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jLabel6)
                     .addComponent(jLabelTotal))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonCheckOut, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jLabel1.setText("ORDER");
@@ -212,27 +244,21 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Action {
 
         jTableOrder.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        jTableOrder.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        jTableOrder.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTableOrderKeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTableOrderKeyReleased(evt);
-            }
-        });
+        jTableOrder.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane7.setViewportView(jTableOrder);
 
-        jLabel7.setText("BÀN ...");
+        jLabelTableName.setText("BÀN ...");
+
+        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -243,62 +269,101 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Action {
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPaneTable, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
-                            .addComponent(jSeparator1))))
+                        .addComponent(jScrollPaneTable, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPaneFood))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jLabelTableName, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPaneFood, javax.swing.GroupLayout.PREFERRED_SIZE, 672, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addContainerGap()
+                .addComponent(jScrollPaneTable, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPaneFood)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPaneTable, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPaneFood, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
-                            .addComponent(jScrollPane5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel7))
+                            .addComponent(jLabelTableName))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 12, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addContainerGap())))
+                    .addComponent(jSeparator2)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jListCategoryValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListCategoryValueChanged
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jListCategoryValueChanged
+
+    private void jScrollPaneTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPaneTableMouseClicked
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jScrollPaneTableMouseClicked
+
+    private void jButtonCheckOutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonCheckOutMouseClicked
+        // TODO add your handling code here:
+        bill.setStatus(1);
+        bill.setDiscount(jSlider1.getValue());
+        bill.setTotal(Integer.parseInt(jLabelTotal.getText()));
+        billDao.updateBill(bill);
+        
+        Bill newBill = new Bill();
+        newBill.setId_table(table.getId());
+        newBill.setStatus(0);
+        billDao.createBill(newBill);
+        
+        bill = newBill;
+        loadingOrder(newBill);
+        loading();
+        jScrollPaneFood.setVisible(false);
+        jListCategory.setVisible(false);
+        
+    }//GEN-LAST:event_jButtonCheckOutMouseClicked
+
+    private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
+        // TODO add your handling code here:
+        caculateTotal();
+    }//GEN-LAST:event_jSlider1StateChanged
+
+    private void jListCategoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListCategoryMouseClicked
         // TODO add your handling code here:
         category = categoryDao.findByName(jListCategory.getSelectedValue());
         foodList = foodDao.findByCategory(category.getId());
@@ -310,45 +375,7 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Action {
         panelFood.revalidate();
         panelFood.repaint();
         jScrollPaneFood.setViewportView(panelFood);
-    }//GEN-LAST:event_jListCategoryValueChanged
-
-    private void jScrollPaneTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPaneTableMouseClicked
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_jScrollPaneTableMouseClicked
-
-    private void jListTableValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListTableValueChanged
-        // TODO add your handling code here:
-        table = tableDao.findByName(jListTable.getSelectedValue());
-        jLabel7.setText(table.getName());
-        bill = billDao.findByIdTale(table.getId());
-        if (bill == null) {
-            bill = new Bill();
-            bill.setId_table(table.getId());
-            bill.setStatus(0);
-            billDao.createBill(bill);
-        }
-        loadingOrder(bill);
-
-//        loadTotal();
-    }//GEN-LAST:event_jListTableValueChanged
-
-    private void jTableOrderKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTableOrderKeyPressed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_jTableOrderKeyPressed
-
-    private void jTableOrderKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTableOrderKeyReleased
-        if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
-            int id = billInfoList.get(jTableOrder.getSelectedRow()).getId();
-            billDao.deleteBillInfo(id);
-            loadingOrder(bill);
-        }
-        
-
-//        loadTableOrder();
-//        loadTotal();
-    }//GEN-LAST:event_jTableOrderKeyReleased
+    }//GEN-LAST:event_jListCategoryMouseClicked
 
     /**
      * @param args the command line arguments
@@ -357,7 +384,7 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Action {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButtonCheckOut;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -365,49 +392,25 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Action {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabelTableName;
+    private javax.swing.JLabel jLabelTempTotal;
     private javax.swing.JLabel jLabelTotal;
     private javax.swing.JList<String> jListCategory;
-    private javax.swing.JList<String> jListTable;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPaneFood;
     private javax.swing.JScrollPane jScrollPaneTable;
-    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSlider jSlider1;
     private javax.swing.JTable jTableOrder;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 
     private void loading() {
-        table = tableDao.findByName(jListTable.getSelectedValue());
-        category = categoryDao.findByName(jListCategory.getSelectedValue());
-
-        jListCategory.removeAll();
-        DefaultListModel<String> dlm = new DefaultListModel<>();
-        categoryList.forEach(obj -> {
-            dlm.addElement(obj.getName());
-        });
-        jListCategory.setModel(dlm);
-
-        jListTable.removeAll();
-        DefaultListModel<String> dlmTable = new DefaultListModel<>();
-        tableList.forEach(obj -> {
-            dlmTable.addElement(obj.getName());
-        });
-        jListTable.setModel(dlmTable);
-
-        foodList = foodDao.findByCategory(1);
-        JPanel panelFood = new JPanel();
-        panelFood.setLayout(new GridLayout(foodList.size() / 6, 6));
-        foodList.forEach(obj -> {
-            panelFood.add(new JPanelFood(obj.getName(), obj.getPrice(), this, this));
-        });
-        panelFood.revalidate();
-        panelFood.repaint();
-        jScrollPaneFood.setViewportView(panelFood);
-        
-        
+        loadingCategory();
+        loadingTable();
+//        loadingFood();
     }
 
     private void loadingOrder(Bill bill) {
@@ -433,15 +436,17 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Action {
 
             jTableOrder.changeSelection(0, 0, false, false);
         }
-
         jTableOrder.setModel(dtm);
-
+        
+        //Caculate total money
+        caculateTotal();
+        
     }
 
     @Override
-    public void action(String name) {
+    public void actionClickFood(String name) {
         food = foodDao.findByName(name);
-        
+
         int check = 0;
         for (BillInfo b : billInfoList) {
             if (b.getId_food() == food.getId()) {
@@ -458,8 +463,9 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Action {
             b.setCount(1);
             billDao.createBillInfo(b);
         }
-        
+
         loadingOrder(bill);
+        loadingTable();
     }
 
     private void loadTotal() {
@@ -485,6 +491,60 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Action {
 //        }
 //        jTableOrder.revalidate();
 //        jTableOrder.repaint();
+    }
+
+    @Override
+    public void actionClickTable(String name) {
+        loadingCategory();
+        loadingFood();
+        
+        table = tableDao.findByName(name);
+        jLabelTableName.setText(name);
+        bill = billDao.findByIdTale(table.getId());
+        if (bill == null) {
+            bill = new Bill();
+            bill.setId_table(table.getId());
+            bill.setStatus(0);
+            billDao.createBill(bill);
+        }
+        loadingOrder(bill);
+        
+    }
+
+    private void loadingTable() {
+        tableList = tableDao.getAll();
+        JPanel panelTable = new JPanel();
+        panelTable.setLayout(new GridLayout(0, 1));
+        tableList.forEach(obj -> {
+            panelTable.add(new JPanelTable(obj.getName(), obj.getStatus(), this, this));
+        });
+        panelTable.revalidate();
+        panelTable.repaint();
+        jScrollPaneTable.setViewportView(panelTable);
+    }
+
+    private void loadingCategory() {
+        category = categoryDao.findByName(jListCategory.getSelectedValue());
+        jListCategory.removeAll();
+        DefaultListModel<String> dlm = new DefaultListModel<>();
+        categoryList.forEach(obj -> {
+            dlm.addElement(obj.getName());
+        });
+        jListCategory.setModel(dlm);
+        jListCategory.setVisible(true);
+    }
+
+    private void loadingFood() {
+        foodList = foodDao.findByCategory(1);
+        JPanel panelFood = new JPanel();
+        panelFood.setLayout(new GridLayout(foodList.size() / 6, 6));
+        foodList.forEach(obj -> {
+            panelFood.add(new JPanelFood(obj.getName(), obj.getPrice(), this, this));
+        });
+        panelFood.revalidate();
+        panelFood.repaint();
+        jScrollPaneFood.setViewportView(panelFood);
+        jScrollPaneFood.setVisible(true);
     }
 
 }

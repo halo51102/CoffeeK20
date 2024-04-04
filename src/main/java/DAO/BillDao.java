@@ -27,6 +27,7 @@ public class BillDao implements BillRepository {
     Connection conn = DbUtil.connect();
     PreparedStatement ps = null;
     ResultSet rs = null;
+    FoodDao foodDao = new FoodDao();
 
     @Override
     public List<BillInfo> getBillInfo(int id_bill) {
@@ -59,7 +60,7 @@ public class BillDao implements BillRepository {
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                b = new Bill(rs.getInt("id"), rs.getInt("idTable"), rs.getInt("totalPrice"), rs.getInt("status"));
+                b = new Bill(rs.getInt("id"), rs.getInt("idTable"), rs.getInt("totalPrice"), rs.getInt("status"), rs.getInt("discount"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(CategoryDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -122,6 +123,32 @@ public class BillDao implements BillRepository {
         } catch (SQLException ex) {
             Logger.getLogger(CategoryDao.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public void updateBill(Bill bill) {
+        try {
+            String sql = "update Bill set status = ?,discount=?,totalPrice=? where id = ?";
+
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, bill.getStatus());
+            ps.setInt(2, bill.getDiscount());
+            ps.setInt(3, bill.getTotal());
+            ps.setInt(4, bill.getId());
+            ps.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public int caculateBill(int id_bill) {
+        int result = 0;
+        List<BillInfo> list = this.getBillInfo(id_bill);
+        for (BillInfo item : list) {
+            result += item.getCount() * foodDao.findById(item.getId_food()).getPrice();
+        }
+        return result;
     }
 
 }
