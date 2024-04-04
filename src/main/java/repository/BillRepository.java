@@ -19,5 +19,7 @@ public interface BillRepository {
     void deleteBillInfo(int id);
     void updateBillInfo(BillInfo bi);
     void createBill(Bill bill);
+    void updateBill(Bill bill);
+    int caculateBill(int id_bill);
     
 }

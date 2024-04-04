@@ -14,4 +14,5 @@ import java.util.List;
 public interface TableRepository {
     List<Table> getAll();
     Table findByName(String name);
+    void update(Table table);
 }

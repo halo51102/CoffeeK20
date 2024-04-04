@@ -1,30 +1,46 @@
 package GUI;
 
 import java.awt.Color;
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.border.Border;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-
 /**
  *
  * @author Admin
  */
 public class JPanelTable extends javax.swing.JPanel {
+    Callback callback;
     /**
      * Creates new form Table
+     *
      * @param name
      * @param status
+     * @param parent
+     * @param callback
      */
-    public JPanelTable(String name, String status, JFrame parent) {
+    public JPanelTable(String name, String status, JFrame parent, Callback callback) {
         initComponents();
-        jLabel1.setText(name);
-        if(!"trống".equals(status)){
+        this.callback = callback;
+        jLabelTableName.setText(name);
+        jLabelStatus.setText(status);
+        
+        if(!"Trống".equals(status)){
             this.setBackground(Color.red);
-            this.setForeground(Color.white);
         }
+        else{
+            this.setBackground(Color.green);
+        }
+    }
+
+
+    public interface Callback {
+
+        public void actionClickTable(String name);
     }
 
     /**
@@ -36,9 +52,11 @@ public class JPanelTable extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        jLabelTableName = new javax.swing.JLabel();
+        jLabelStatus = new javax.swing.JLabel();
 
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 formMouseClicked(evt);
@@ -51,7 +69,9 @@ public class JPanelTable extends javax.swing.JPanel {
             }
         });
 
-        jLabel1.setText("text");
+        jLabelTableName.setText("text");
+
+        jLabelStatus.setText("jLabel1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -59,33 +79,42 @@ public class JPanelTable extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addComponent(jLabel1)
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelStatus)
+                    .addComponent(jLabelTableName))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(9, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabelTableName)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabelStatus)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void formMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseEntered
         // TODO add your handling code here:
-        
+        Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
+        this.setBorder(border);
+
     }//GEN-LAST:event_formMouseEntered
 
     private void formMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseExited
         // TODO add your handling code here:
+        this.setBorder(null);
     }//GEN-LAST:event_formMouseExited
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         // TODO add your handling code here:
+        callback.actionClickTable(jLabelTableName.getText());
     }//GEN-LAST:event_formMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabelStatus;
+    private javax.swing.JLabel jLabelTableName;
     // End of variables declaration//GEN-END:variables
 }

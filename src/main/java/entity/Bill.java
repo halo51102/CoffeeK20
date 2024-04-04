@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 public class Bill implements Serializable {
     private int id;
     private int id_table;
-    private double total;
+    private int total;
     private int status;
+    private int discount;
 }

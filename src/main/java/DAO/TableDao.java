@@ -65,5 +65,19 @@ public class TableDao implements TableRepository {
         return c;
     }
 
+    @Override
+    public void update(Table table) {
+        try {
+            String sql = "update tableFood set status = ? where id = ?";
+
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, table.getStatus());
+            ps.setInt(2, table.getId());
+            ps.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
    
 }
