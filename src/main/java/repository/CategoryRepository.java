@@ -4,7 +4,7 @@
  */
 package repository;
 
-import entity.Category;
+import DTO.Category;
 import java.util.List;
 
 /**

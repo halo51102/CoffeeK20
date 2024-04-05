@@ -4,8 +4,8 @@
  */
 package DAO;
 
-import entity.Category;
-import entity.Table;
+import DTO.Category;
+import DTO.Table;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
