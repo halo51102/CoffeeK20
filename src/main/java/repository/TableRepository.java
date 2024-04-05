@@ -4,7 +4,7 @@
  */
 package repository;
 
-import entity.Table;
+import DTO.Table;
 import java.util.List;
 
 /**

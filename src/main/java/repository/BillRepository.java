@@ -4,8 +4,8 @@
  */
 package repository;
 
-import entity.Bill;
-import entity.BillInfo;
+import DTO.Bill;
+import DTO.BillInfo;
 import java.util.List;
 
 /**

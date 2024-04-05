@@ -4,7 +4,7 @@
  */
 package DAO;
 
-import entity.Category;
+import DTO.Category;
 import java.sql.*;
 import java.util.*;
 import java.util.logging.Level;

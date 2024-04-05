@@ -4,7 +4,7 @@
  */
 package repository;
 
-import entity.Food;
+import DTO.Food;
 import java.util.List;
 
 /**

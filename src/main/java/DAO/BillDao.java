@@ -4,9 +4,9 @@
  */
 package DAO;
 
-import entity.Bill;
-import entity.BillInfo;
-import entity.Category;
+import DTO.Bill;
+import DTO.BillInfo;
+import DTO.Category;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
