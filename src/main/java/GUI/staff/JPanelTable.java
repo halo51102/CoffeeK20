@@ -30,10 +30,10 @@ public class JPanelTable extends javax.swing.JPanel {
         jLabelStatus.setText(status);
         
         if(!"Trống".equals(status)){
-            this.setBackground(Color.red);
+            this.setBackground(Color.gray);
         }
         else{
-            this.setBackground(Color.green);
+            this.setBackground(Color.white);
         }
     }
 

@@ -60,7 +60,7 @@ public class BillDao implements BillRepository {
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                b = new Bill(rs.getInt("id"), rs.getInt("idTable"), rs.getInt("totalPrice"), rs.getInt("status"), rs.getInt("discount"));
+                b = new Bill(rs.getInt("id"), rs.getInt("idTable"), rs.getInt("totalPrice"), rs.getInt("status"), rs.getInt("discount"), rs.getDate("DateCheckIn"), rs.getDate("DateCheckOut"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(CategoryDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -114,11 +114,12 @@ public class BillDao implements BillRepository {
     @Override
     public void createBill(Bill bill) {
         try {
-            String sql = "insert into Bill(idTable,status) values (?,?)";
+            String sql = "insert into Bill(idTable,status,DateCheckIn) values (?,?,?)";
 
             ps = conn.prepareStatement(sql);
             ps.setInt(1, bill.getId_table());
             ps.setInt(2, bill.getStatus());
+            ps.setDate(3, bill.getCheckin_date());
             ps.execute();
         } catch (SQLException ex) {
             Logger.getLogger(CategoryDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -128,13 +129,16 @@ public class BillDao implements BillRepository {
     @Override
     public void updateBill(Bill bill) {
         try {
-            String sql = "update Bill set status = ?,discount=?,totalPrice=? where id = ?";
+            String sql = "update Bill set status = ?,discount=?,totalPrice=?,DateCheckIn=?,DateCheckOut=? where id = ?";
 
             ps = conn.prepareStatement(sql);
             ps.setInt(1, bill.getStatus());
             ps.setInt(2, bill.getDiscount());
             ps.setInt(3, bill.getTotal());
-            ps.setInt(4, bill.getId());
+            ps.setDate(4, bill.getCheckin_date());
+            ps.setDate(5, bill.getCheckout_date());
+            ps.setInt(6, bill.getId());
+
             ps.execute();
         } catch (SQLException ex) {
             Logger.getLogger(CategoryDao.class.getName()).log(Level.SEVERE, null, ex);

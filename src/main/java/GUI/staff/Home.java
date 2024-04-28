@@ -17,6 +17,8 @@ import DTO.Food;
 import DTO.Table;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
@@ -32,7 +34,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Admin
  */
-public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPanelTable.Callback {
+public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPanelTable.Callback, JDialogBill.Callback {
 
     CategoryDao categoryDao;
     Category category;
@@ -69,6 +71,7 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
         this.categoryList = categoryDao.getAll();
         this.account = account;
         this.parent = parent;
+        this.setTitle("CoffeeK20 - " + account.getDisplayName());
 
         loading();
     }
@@ -78,6 +81,30 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
         jLabelTempTotal.setText(String.valueOf(tempTotal));
         int finalTotal = tempTotal - tempTotal * jSlider1.getValue() / 100;
         jLabelTotal.setText(String.valueOf(finalTotal));
+
+//        bill.setDiscount(jSlider1.getValue());
+//        bill.setTotal(Integer.parseInt(jLabelTotal.getText()));
+//        billDao.updateBill(bill);
+    }
+
+    @Override
+    public void actionClickCheckout() {
+        bill.setStatus(1);
+        bill.setDiscount(jSlider1.getValue());
+        bill.setTotal(Integer.parseInt(jLabelTotal.getText()));
+        billDao.updateBill(bill);
+
+        Bill newBill = new Bill();
+        newBill.setId_table(table.getId());
+        newBill.setStatus(0);
+        newBill.setCheckin_date(Date.valueOf(LocalDate.now()));
+        billDao.createBill(newBill);
+        bill = newBill;
+        loadingOrder(newBill);
+        loading();
+        jScrollPaneFood.setVisible(false);
+        jListCategory.setVisible(false);
+        jSlider1.setValue(0);
     }
 
     public interface CallbackTable {
@@ -95,8 +122,8 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
     private void initComponents() {
 
         jPanel4 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jButtonAccountProfile = new javax.swing.JButton();
+        jButtonLogout = new javax.swing.JButton();
         jScrollPaneTable = new javax.swing.JScrollPane();
         jScrollPane5 = new javax.swing.JScrollPane();
         jListCategory = new javax.swing.JList<>();
@@ -121,20 +148,20 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton2.setText("THÔNG TIN CÁ NHÂN");
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButtonAccountProfile.setText("THÔNG TIN CÁ NHÂN");
+        jButtonAccountProfile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonAccountProfile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButtonAccountProfileActionPerformed(evt);
             }
         });
 
-        jButton3.setText("ĐĂNG XUẤT");
-        jButton3.setToolTipText("");
-        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jButtonLogout.setText("ĐĂNG XUẤT");
+        jButtonLogout.setToolTipText("");
+        jButtonLogout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jButtonLogoutActionPerformed(evt);
             }
         });
 
@@ -145,16 +172,16 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
+                    .addComponent(jButtonLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonAccountProfile, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonAccountProfile, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -380,22 +407,11 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
 
     private void jButtonCheckOutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonCheckOutMouseClicked
         // TODO add your handling code here:
-        bill.setStatus(1);
         bill.setDiscount(jSlider1.getValue());
         bill.setTotal(Integer.parseInt(jLabelTotal.getText()));
         billDao.updateBill(bill);
-
-        Bill newBill = new Bill();
-        newBill.setId_table(table.getId());
-        newBill.setStatus(0);
-        billDao.createBill(newBill);
-
-        bill = newBill;
-        loadingOrder(newBill);
-        loading();
-        jScrollPaneFood.setVisible(false);
-        jListCategory.setVisible(false);
-        jSlider1.setValue(0);
+        JDialogBill a = new JDialogBill(this, true, bill, account, this);
+        a.setVisible(true);
 
     }//GEN-LAST:event_jButtonCheckOutMouseClicked
 
@@ -427,26 +443,26 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
         loading();
     }//GEN-LAST:event_jButtonReOrderActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButtonAccountProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAccountProfileActionPerformed
         // TODO add your handling code here:
         JDialogAccountProfile d = new JDialogAccountProfile(this, true, account);
         d.setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButtonAccountProfileActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButtonLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLogoutActionPerformed
         // TODO add your handling code here:
         this.dispose();
         new Login().setVisible(true);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_jButtonLogoutActionPerformed
 
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButtonAccountProfile;
     private javax.swing.JButton jButtonCheckOut;
+    private javax.swing.JButton jButtonLogout;
     private javax.swing.JButton jButtonReOrder;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -489,13 +505,19 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
 
         }
 
-        String columns[] = {"TÊN MÓN", "SỐ LƯỢNG", "ĐƠN GIÁ"};
+        String columns[] = {"STT", "TÊN MÓN", "SỐ LƯỢNG", "TIỀN MÓN"};
         DefaultTableModel dtm = new DefaultTableModel(columns, 0);
         if (billInfoList != null) {
             if (!billInfoList.isEmpty()) {
                 billInfoList.forEach(obj -> {
-                    dtm.addRow(new Object[]{foodDao.findById(obj.getId_food()).getName(), obj.getCount(), foodDao.findById(obj.getId_food()).getPrice()});
+                    dtm.addRow(new Object[]{"STT",
+                        foodDao.findById(obj.getId_food()).getName(),
+                        obj.getCount(),
+                        foodDao.findById(obj.getId_food()).getPrice() * obj.getCount()});
                 });
+                for (int i = 0; i < dtm.getRowCount(); i++) {
+                    dtm.setValueAt(i + 1, i, 0);
+                }
 
                 jTableOrder.getSelectionModel().addListSelectionListener((ListSelectionEvent lse) -> {
                     int position = jTableOrder.getSelectedRow();
@@ -526,6 +548,7 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
     @Override
     public void actionClickFood(String name) {
         food = foodDao.findByName(name);
+
         try {
             int check = 0;
 
@@ -537,12 +560,21 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
                     break;
                 }
             }
+
             if (check == 0) {
                 BillInfo b = new BillInfo();
                 b.setId_bill(bill.getId());
                 b.setId_food(food.getId());
                 b.setCount(1);
                 billDao.createBillInfo(b);
+            }
+
+            if (bill == null) {
+                bill = new Bill();
+                bill.setId_table(table.getId());
+                bill.setStatus(0);
+                bill.setCheckin_date(Date.valueOf(LocalDate.now()));
+                billDao.createBill(bill);
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn bàn");
@@ -564,6 +596,7 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
             bill = new Bill();
             bill.setId_table(table.getId());
             bill.setStatus(0);
+            bill.setCheckin_date(Date.valueOf(LocalDate.now()));
             billDao.createBill(bill);
         }
         loadingOrder(bill);
@@ -574,12 +607,11 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
         JPanel panelTable = new JPanel();
         panelTable.setLayout(new GridLayout(0, 1));
         tableList.forEach(obj -> {
-            if(!billDao.getBillInfo(billDao.findByIdTale(obj.getId()).getId()).isEmpty())
-            {
+            if (!billDao.getBillInfo(billDao.findByIdTale(obj.getId()).getId()).isEmpty()) {
                 obj.setStatus("Có người");
                 tableDao.update(obj);
             }
-            
+
             panelTable.add(new JPanelTable(obj.getName(), obj.getStatus(), this, this));
         });
         panelTable.revalidate();

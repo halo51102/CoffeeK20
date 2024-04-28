@@ -5,6 +5,7 @@ C:\Users\Admin\Documents\GitHub\CoffeeK20\src\main\java\GUI\staff\Login.java
 C:\Users\Admin\Documents\GitHub\CoffeeK20\src\main\java\repository\TableRepository.java
 C:\Users\Admin\Documents\GitHub\CoffeeK20\src\main\java\DTO\BillInfo.java
 C:\Users\Admin\Documents\GitHub\CoffeeK20\src\main\java\DAO\AccountDao.java
+C:\Users\Admin\Documents\GitHub\CoffeeK20\src\main\java\GUI\staff\JDialogChangePassword.java
 C:\Users\Admin\Documents\GitHub\CoffeeK20\src\main\java\com\coffeek20\CoffeeK20.java
 C:\Users\Admin\Documents\GitHub\CoffeeK20\src\main\java\DAO\FoodDao.java
 C:\Users\Admin\Documents\GitHub\CoffeeK20\src\main\java\DAO\BillDao.java
@@ -14,6 +15,7 @@ C:\Users\Admin\Documents\GitHub\CoffeeK20\src\main\java\DTO\Bill.java
 C:\Users\Admin\Documents\GitHub\CoffeeK20\src\main\java\DAO\TableDao.java
 C:\Users\Admin\Documents\GitHub\CoffeeK20\src\main\java\GUI\staff\JPanelFood.java
 C:\Users\Admin\Documents\GitHub\CoffeeK20\src\main\java\DTO\Account.java
+C:\Users\Admin\Documents\GitHub\CoffeeK20\src\main\java\GUI\staff\JDialogBill.java
 C:\Users\Admin\Documents\GitHub\CoffeeK20\src\main\java\GUI\staff\Home.java
 C:\Users\Admin\Documents\GitHub\CoffeeK20\src\main\java\DTO\Food.java
 C:\Users\Admin\Documents\GitHub\CoffeeK20\src\main\java\util\DbUtil.java

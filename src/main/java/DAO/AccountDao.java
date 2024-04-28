@@ -45,13 +45,33 @@ public class AccountDao implements AccountRepository {
     }
 
     @Override
-    public void changePassword(String oldPass, String newPass) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void changePassword(Account account, String newPass) {
+        try {
+            String sql = "update Account set PassWord = ? where UserName = ?";
+
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, newPass);
+            ps.setString(2, account.getUsername());
+
+            ps.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public void update(Account account) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            String sql = "update Account set DisplayName = ? where UserName = ?";
+
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, account.getDisplayName());
+            ps.setString(2, account.getUsername());
+
+            ps.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
