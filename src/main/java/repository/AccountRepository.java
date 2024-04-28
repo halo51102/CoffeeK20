@@ -12,7 +12,7 @@ import DTO.Account;
  */
 public interface AccountRepository {
     Account login(String username, String password);
-    void changePassword(String oldPass, String newPass);
+    void changePassword(Account account, String newPass);
     void update(Account account);
     Account findByUsername(String username);
 }
