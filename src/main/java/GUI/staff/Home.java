@@ -74,13 +74,13 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
         this.tableDao = new TableDao();
         this.foodDao = new FoodDao();
         this.billDao = new BillDao();
-        this.categoryList = categoryDao.getAll();
+        this.categoryList = categoryDao.findAll();
         this.account = account;
         this.parent = parent;
-
+        this.setTitle("CoffeeK20 - Nhân viên: " + account.getDisplayName());
+        
         loading();
     }
-
     
     private void caculateTotal() {
         int tempTotal = billDao.caculateBill(bill.getId());
