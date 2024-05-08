@@ -4,14 +4,21 @@
  */
 package GUI.staff;
 
+import DAO.AccountDao;
 import DTO.Account;
+import java.awt.Frame;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Admin
  */
-public class JDialogAccountProfile extends javax.swing.JDialog {
+public class JDialogAccountProfile extends javax.swing.JDialog implements JDialogChangePassword.Callback {
+
     Account account;
+    Frame parent;
+    AccountDao accountDao;
+
     /**
      * Creates new form JDialogAccountProfile
      *
@@ -23,6 +30,8 @@ public class JDialogAccountProfile extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.account = account;
+        this.parent = parent;
+        accountDao = new AccountDao();
         loading();
     }
 
@@ -66,8 +75,18 @@ public class JDialogAccountProfile extends javax.swing.JDialog {
         jTextFieldName.setText("jTextField3");
 
         jButton1.setText("Đổi mật khẩu");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Cập nhật");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -118,10 +137,27 @@ public class JDialogAccountProfile extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        JDialogChangePassword a = new JDialogChangePassword(this, true, account, this);
+        a.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        account.setDisplayName(jTextFieldName.getText());
+        try {
+            accountDao.update(account);
+            JOptionPane.showMessageDialog(this, "Cập nhật thành công");
+            this.dispose();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Cập nhật thất bại");
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -136,8 +172,14 @@ public class JDialogAccountProfile extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     private void loading() {
+        account = accountDao.findByUsername(account.getUsername());
         jTextFieldUsername.setText(account.getUsername());
         jTextFieldPassWord.setText(account.getPassword());
         jTextFieldName.setText(account.getDisplayName());
+    }
+
+    @Override
+    public void actionClickChangePassword() {
+        loading();
     }
 }

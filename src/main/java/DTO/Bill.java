@@ -5,6 +5,7 @@
 package DTO;
 
 import java.io.Serializable;
+import java.sql.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,4 +23,6 @@ public class Bill implements Serializable {
     private int total;
     private int status;
     private int discount;
+    private Date checkin_date;
+    private Date checkout_date;
 }
