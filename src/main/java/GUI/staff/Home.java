@@ -574,17 +574,19 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
         JPanel panelTable = new JPanel();
         panelTable.setLayout(new GridLayout(0, 1));
         tableList.forEach(obj -> {
+            if(billDao.findByIdTale(obj.getId())!=null){
             if(!billDao.getBillInfo(billDao.findByIdTale(obj.getId()).getId()).isEmpty())
             {
                 obj.setStatus("Có người");
                 tableDao.update(obj);
-            }
+            }}
             
             panelTable.add(new JPanelTable(obj.getName(), obj.getStatus(), this, this));
         });
         panelTable.revalidate();
         panelTable.repaint();
         jScrollPaneTable.setViewportView(panelTable);
+
     }
 
     private void loadingCategory() {
