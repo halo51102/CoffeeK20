@@ -27,6 +27,7 @@ public class JDialogChangePassword extends javax.swing.JDialog {
         this.account = account;
         this.accountDao = new AccountDao();
         this.callback = callback;
+        this.setTitle("Change Password Form");
     }
     public interface Callback{
         public void actionClickChangePassword();
@@ -120,7 +121,7 @@ public class JDialogChangePassword extends javax.swing.JDialog {
                     .addComponent(jTextFieldConfirmNewPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jButtonOK)
-                .addContainerGap(107, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();

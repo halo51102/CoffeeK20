@@ -13,13 +13,26 @@ import java.util.List;
  * @author Admin
  */
 public interface BillRepository {
+
     List<BillInfo> getBillInfo(int id_bill);
+
     Bill findByIdTale(int id_table);
+
     void createBillInfo(BillInfo bi);
+
     void deleteBillInfo(int id);
+
     void updateBillInfo(BillInfo bi);
+
     void createBill(Bill bill);
+
     void updateBill(Bill bill);
+
     int caculateBill(int id_bill);
-    
+
+    List<Bill> findAllBill();
+
+    void deleteBill(Bill bill);
+
+    int count();
 }

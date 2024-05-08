@@ -26,9 +26,9 @@ public class TableDao implements TableRepository {
     Connection conn = DbUtil.connect();
     PreparedStatement ps = null;
     ResultSet rs = null;
-    
+
     @Override
-    public List<Table> getAll() {
+    public List<Table> findAll() {
         List<Table> list = new ArrayList<>();
         try {
             String sql = "select * from tableFood";
@@ -37,7 +37,7 @@ public class TableDao implements TableRepository {
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                Table t = new Table(rs.getInt("id"), rs.getString("name"),rs.getString("status"));
+                Table t = new Table(rs.getInt("id"), rs.getString("name"), rs.getString("status"));
                 list.add(t);
             }
         } catch (SQLException ex) {
@@ -57,7 +57,7 @@ public class TableDao implements TableRepository {
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                c = new Table(rs.getInt("id"),rs.getString("name"),rs.getString("status"));
+                c = new Table(rs.getInt("id"), rs.getString("name"), rs.getString("status"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(CategoryDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -68,16 +68,81 @@ public class TableDao implements TableRepository {
     @Override
     public void update(Table table) {
         try {
-            String sql = "update tableFood set status = ? where id = ?";
+            String sql = "update tableFood set name = ?, status = ? where id = ?";
 
             ps = conn.prepareStatement(sql);
-            ps.setString(1, table.getStatus());
-            ps.setInt(2, table.getId());
+            ps.setString(2, table.getStatus());
+            ps.setString(1, table.getName());
+            ps.setInt(3, table.getId());
             ps.execute();
         } catch (SQLException ex) {
             Logger.getLogger(CategoryDao.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-   
+    @Override
+    public Table findById(int id) {
+        Table c = null;
+        try {
+            String sql = "select * from tableFood where id = ?";
+
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                c = new Table(rs.getInt("id"), rs.getString("name"), rs.getString("status"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return c;
+    }
+
+    @Override
+    public void create(Table table) {
+        try {
+            String sql = "insert into tableFood values(?,?)";
+
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, table.getName());
+            ps.setString(2, "Trống");
+
+            ps.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void delete(Table table) {
+        try {
+            String sql = "delete from tableFood where id = ?";
+
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, table.getId());
+
+            ps.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public int count() {
+        int n = 0;
+        try {
+            String sql = "select count(*) as count from tableFood";
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                n = rs.getInt("count");
+            }
+            return n;
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return n;
+    }
+
 }

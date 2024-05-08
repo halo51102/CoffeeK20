@@ -15,11 +15,18 @@ import DTO.BillInfo;
 import DTO.Category;
 import DTO.Food;
 import DTO.Table;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -27,30 +34,31 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
+import util.ImageUtil;
 
 /**
  *
  * @author Admin
  */
-public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPanelTable.Callback {
-
+public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPanelTable.Callback, JDialogBill.Callback {
+    
     CategoryDao categoryDao;
     Category category;
     List<Category> categoryList;
-
+    
     TableDao tableDao;
     Table table;
     List<Table> tableList;
-
+    
     FoodDao foodDao;
     Food food;
     List<Food> foodList;
-
+    
     Bill bill;
     BillInfo billInfo;
     BillDao billDao;
     List<BillInfo> billInfoList;
-
+    
     Account account;
     JFrame parent;
 
@@ -73,15 +81,17 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
         loading();
     }
 
+    
     private void caculateTotal() {
         int tempTotal = billDao.caculateBill(bill.getId());
         jLabelTempTotal.setText(String.valueOf(tempTotal));
         int finalTotal = tempTotal - tempTotal * jSlider1.getValue() / 100;
         jLabelTotal.setText(String.valueOf(finalTotal));
+        
     }
-
+    
     public interface CallbackTable {
-
+        
         public void callbackTable();
     }
 
@@ -336,33 +346,35 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPaneTable, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPaneFood)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabelTableName)
-                            .addComponent(jButtonReOrder))
+                        .addComponent(jScrollPaneTable, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPaneFood)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 12, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addContainerGap())))
-                    .addComponent(jSeparator2)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabelTableName)
+                                    .addComponent(jButtonReOrder))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 12, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                        .addContainerGap())))
+                            .addComponent(jSeparator2)))))
         );
 
         pack();
@@ -380,22 +392,14 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
 
     private void jButtonCheckOutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonCheckOutMouseClicked
         // TODO add your handling code here:
-        bill.setStatus(1);
-        bill.setDiscount(jSlider1.getValue());
-        bill.setTotal(Integer.parseInt(jLabelTotal.getText()));
-        billDao.updateBill(bill);
 
-        Bill newBill = new Bill();
-        newBill.setId_table(table.getId());
-        newBill.setStatus(0);
-        billDao.createBill(newBill);
-
-        bill = newBill;
-        loadingOrder(newBill);
-        loading();
-        jScrollPaneFood.setVisible(false);
-        jListCategory.setVisible(false);
-        jSlider1.setValue(0);
+        if (jButtonCheckOut.isEnabled()) {
+            bill.setDiscount(jSlider1.getValue());
+            bill.setTotal(Integer.parseInt(jLabelTotal.getText()));
+            billDao.updateBill(bill);
+            JDialogBill a = new JDialogBill(this, true, bill, account, this);
+            a.setVisible(true);
+        }
 
     }//GEN-LAST:event_jButtonCheckOutMouseClicked
 
@@ -411,7 +415,7 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
         JPanel panelFood = new JPanel();
         panelFood.setLayout(new GridLayout(foodList.size() / 6, 6));
         foodList.forEach(obj -> {
-            panelFood.add(new JPanelFood(obj.getName(), obj.getPrice(), this, this));
+            panelFood.add(new JPanelFood(obj, this, this));
         });
         panelFood.revalidate();
         panelFood.repaint();
@@ -476,19 +480,18 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
         jButtonCheckOut.setEnabled(false);
         jSlider1.setEnabled(false);
         jButtonReOrder.setEnabled(false);
-
 //        loadingFood();
     }
-
+    
     private void loadingOrder(Bill bill) {
-
+        
         jTableOrder.removeAll();
         try {
             billInfoList = billDao.getBillInfo(bill.getId());
         } catch (Exception e) {
-
+            
         }
-
+        
         String columns[] = {"TÊN MÓN", "SỐ LƯỢNG", "ĐƠN GIÁ"};
         DefaultTableModel dtm = new DefaultTableModel(columns, 0);
         if (billInfoList != null) {
@@ -496,15 +499,15 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
                 billInfoList.forEach(obj -> {
                     dtm.addRow(new Object[]{foodDao.findById(obj.getId_food()).getName(), obj.getCount(), foodDao.findById(obj.getId_food()).getPrice()});
                 });
-
+                
                 jTableOrder.getSelectionModel().addListSelectionListener((ListSelectionEvent lse) -> {
                     int position = jTableOrder.getSelectedRow();
                     if (position >= 0) {
                         billInfo = billInfoList.get(position);
                     }
-
+                    
                 });
-
+                
                 jTableOrder.changeSelection(0, 0, false, false);
                 jButtonCheckOut.setEnabled(true);
                 jSlider1.setEnabled(true);
@@ -522,13 +525,13 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
 
         //Caculate total money
     }
-
+    
     @Override
     public void actionClickFood(String name) {
         food = foodDao.findByName(name);
         try {
             int check = 0;
-
+            
             for (BillInfo b : billInfoList) {
                 if (b.getId_food() == food.getId()) {
                     b.setCount(b.getCount() + 1);
@@ -547,16 +550,16 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn bàn");
         }
-
+        
         loadingOrder(bill);
         loadingTable();
     }
-
+    
     @Override
     public void actionClickTable(String name) {
         loadingCategory();
         loadingFood();
-
+        
         table = tableDao.findByName(name);
         jLabelTableName.setText(name);
         bill = billDao.findByIdTale(table.getId());
@@ -564,31 +567,33 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
             bill = new Bill();
             bill.setId_table(table.getId());
             bill.setStatus(0);
+            bill.setCheckin_date(Date.valueOf(LocalDate.now()));
             billDao.createBill(bill);
         }
         loadingOrder(bill);
     }
-
+    
     private void loadingTable() {
-        tableList = tableDao.getAll();
+        tableList = tableDao.findAll();
         JPanel panelTable = new JPanel();
         panelTable.setLayout(new GridLayout(0, 1));
         tableList.forEach(obj -> {
-            if(billDao.findByIdTale(obj.getId())!=null){
-            if(!billDao.getBillInfo(billDao.findByIdTale(obj.getId()).getId()).isEmpty())
-            {
-                obj.setStatus("Có người");
-                tableDao.update(obj);
-            }}
+            
+            if (billDao.findByIdTale(obj.getId()) != null) {
+                if (!billDao.getBillInfo(billDao.findByIdTale(obj.getId()).getId()).isEmpty()) {
+                    obj.setStatus("Có người");
+                    tableDao.update(obj);
+                }
+            }
             
             panelTable.add(new JPanelTable(obj.getName(), obj.getStatus(), this, this));
         });
         panelTable.revalidate();
         panelTable.repaint();
         jScrollPaneTable.setViewportView(panelTable);
-
+        
     }
-
+    
     private void loadingCategory() {
         category = categoryDao.findByName(jListCategory.getSelectedValue());
         jListCategory.removeAll();
@@ -599,18 +604,40 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
         jListCategory.setModel(dlm);
         jListCategory.setVisible(true);
     }
-
+    
     private void loadingFood() {
         foodList = foodDao.findByCategory(1);
         JPanel panelFood = new JPanel();
         panelFood.setLayout(new GridLayout(foodList.size() / 6, 5));
         foodList.forEach(obj -> {
-            panelFood.add(new JPanelFood(obj.getName(), obj.getPrice(), this, this));
+            panelFood.add(new JPanelFood(obj, this, this));
         });
         panelFood.revalidate();
         panelFood.repaint();
         jScrollPaneFood.setViewportView(panelFood);
         jScrollPaneFood.setVisible(true);
     }
-
+    
+    @Override
+    public void actionClickCheckout() {
+        bill.setStatus(1);
+        bill.setDiscount(jSlider1.getValue());
+        bill.setTotal(Integer.parseInt(jLabelTotal.getText()));
+        bill.setStaff(account.getUsername());
+        bill.setCheckout_date(Date.valueOf(LocalDate.now()));
+        billDao.updateBill(bill);
+        
+        Bill newBill = new Bill();
+        newBill.setId_table(table.getId());
+        newBill.setStatus(0);
+        newBill.setCheckin_date(Date.valueOf(LocalDate.now()));
+        billDao.createBill(newBill);
+        
+        bill = newBill;
+        loadingOrder(newBill);
+        loading();
+        jScrollPaneFood.setVisible(false);
+        jListCategory.setVisible(false);
+        jSlider1.setValue(0);
+    }
 }

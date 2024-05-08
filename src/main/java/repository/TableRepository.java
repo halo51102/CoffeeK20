@@ -12,7 +12,18 @@ import java.util.List;
  * @author Admin
  */
 public interface TableRepository {
-    List<Table> getAll();
+
+    Table findById(int id);
+
+    List<Table> findAll();
+
     Table findByName(String name);
+
     void update(Table table);
+
+    void create(Table table);
+
+    void delete(Table table);
+
+    int count();
 }

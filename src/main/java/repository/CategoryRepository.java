@@ -11,7 +11,21 @@ import java.util.List;
  *
  * @author Admin
  */
-public interface CategoryRepository{
-    List<Category> getAll();
+public interface CategoryRepository {
+
+    Category findById(int id);
+
+    List<Category> findAll();
+
     Category findByName(String name);
+
+    List<Category> findByWord(String word);
+
+    void create(Category c);
+
+    void update(Category c);
+
+    void delete(Category c);
+
+    int count();
 }

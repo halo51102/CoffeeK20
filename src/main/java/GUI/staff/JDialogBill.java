@@ -11,6 +11,7 @@ import DTO.Account;
 import DTO.Bill;
 import DTO.BillInfo;
 import java.awt.Frame;
+import java.time.LocalDate;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -49,7 +50,7 @@ public class JDialogBill extends javax.swing.JDialog {
     private void loading() {
         jLabelIdBill.setText(String.valueOf(bill.getId()));
         jLabelUserName.setText(account.getDisplayName());
-        jLabelDate.setText(String.valueOf(bill.getCheckin_date()));
+        jLabelDate.setText(String.valueOf(LocalDate.now()));
         loadingBillInfo();
     }
 
@@ -107,6 +108,7 @@ public class JDialogBill extends javax.swing.JDialog {
         jLabel8 = new javax.swing.JLabel();
         jLabelTotal = new javax.swing.JLabel();
         jButtonExportBill = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -118,7 +120,7 @@ public class JDialogBill extends javax.swing.JDialog {
 
         jLabel3.setText("Nhân viên");
 
-        jLabel4.setText("Ngày tạo HĐ");
+        jLabel4.setText("Ngày xuất HĐ");
 
         jLabelIdBill.setText("jLabel5");
 
@@ -150,6 +152,8 @@ public class JDialogBill extends javax.swing.JDialog {
             }
         });
 
+        jLabel5.setText("VNĐ");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -171,11 +175,13 @@ public class JDialogBill extends javax.swing.JDialog {
                                         .addComponent(jLabelIdBill, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jLabelUserName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jLabelDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(67, 67, 67)
-                                    .addComponent(jLabelTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabelTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel5))
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(87, 87, 87)
@@ -213,7 +219,8 @@ public class JDialogBill extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jLabelTotal))
+                    .addComponent(jLabelTotal)
+                    .addComponent(jLabel5))
                 .addGap(18, 18, 18)
                 .addComponent(jButtonExportBill)
                 .addContainerGap(19, Short.MAX_VALUE))
@@ -239,6 +246,7 @@ public class JDialogBill extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabelDate;
     private javax.swing.JLabel jLabelIdBill;

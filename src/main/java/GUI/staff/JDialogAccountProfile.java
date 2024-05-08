@@ -172,6 +172,7 @@ public class JDialogAccountProfile extends javax.swing.JDialog implements JDialo
     // End of variables declaration//GEN-END:variables
 
     private void loading() {
+        this.setTitle("Profile");
         account = accountDao.findByUsername(account.getUsername());
         jTextFieldUsername.setText(account.getUsername());
         jTextFieldPassWord.setText(account.getPassword());
