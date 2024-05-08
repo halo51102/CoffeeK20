@@ -4,8 +4,17 @@
  */
 package GUI.staff;
 
+import DTO.Food;
 import java.awt.Color;
+import java.awt.Image;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.border.Border;
 
@@ -16,20 +25,31 @@ import javax.swing.border.Border;
 public class JPanelFood extends javax.swing.JPanel {
 
     Callback action;
+    Food food;
 
     /**
      * Creates new form JPanelFood
      *
-     * @param name
-     * @param price
+     * @param food
      * @param parent
      * @param action
      */
-    public JPanelFood(String name, int price, JFrame parent, Callback action) {
+    public JPanelFood(Food food, JFrame parent, Callback action) {
         initComponents();
         this.action = action;
-        jLabel2.setText(name);
-        jLabel3.setText(String.valueOf(price));
+        this.food = food;
+        jLabel2.setText(food.getName());
+        jLabel3.setText(String.valueOf(food.getPrice()));
+        if (food.getImage() != null) {
+            try {
+                ImageIcon img = new ImageIcon(this.getClass().getResource(food.getImage()));
+                Image resizeImg = img.getImage().getScaledInstance(92, 90, Image.SCALE_SMOOTH);
+                jLabel1.setIcon(new ImageIcon(resizeImg));
+            } catch (NullPointerException e) {
+                jLabel1.setText("no image");
+            }
+        }
+
     }
 
     public interface Callback {

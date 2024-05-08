@@ -20,4 +20,5 @@ public class Food {
     private String name;
     private int id_category;
     private int price;
+    private String image;
 }

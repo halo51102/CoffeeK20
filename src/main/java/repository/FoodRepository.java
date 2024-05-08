@@ -12,7 +12,24 @@ import java.util.List;
  * @author Admin
  */
 public interface FoodRepository {
+
     List<Food> findByCategory(int cId);
+
     Food findByName(String name);
+
     Food findById(int id);
+
+    List<Food> findAll();
+
+    void create(Food food);
+
+    void update(Food food);
+
+    void delete(Food food);
+
+    List<Food> findByWord(String word);
+
+    int count();
+
+    Food bestSeller();
 }

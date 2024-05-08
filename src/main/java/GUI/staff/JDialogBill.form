@@ -44,11 +44,13 @@
                                   </Group>
                               </Group>
                           </Group>
-                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="jLabel8" min="-2" pref="37" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="67" max="-2" attributes="0"/>
-                                  <Component id="jLabelTotal" min="-2" pref="37" max="-2" attributes="0"/>
+                                  <Component id="jLabelTotal" min="-2" pref="109" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Component id="jScrollPane1" min="-2" pref="264" max="-2" attributes="0"/>
                           </Group>
@@ -100,6 +102,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabelTotal" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jButtonExportBill" min="-2" max="-2" attributes="0"/>
@@ -132,7 +135,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Ng&#xe0;y t&#x1ea1;o H&#x110;"/>
+        <Property name="text" type="java.lang.String" value="Ng&#xe0;y xu&#x1ea5;t H&#x110;"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JSeparator" name="jSeparator2">
@@ -190,6 +193,11 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonExportBillActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel5">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="VN&#x110;"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

@@ -25,4 +25,5 @@ public class Bill implements Serializable {
     private int discount;
     private Date checkin_date;
     private Date checkout_date;
+    private String staff;
 }

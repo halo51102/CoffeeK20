@@ -60,7 +60,7 @@ public class BillDao implements BillRepository {
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                b = new Bill(rs.getInt("id"), rs.getInt("idTable"), rs.getInt("totalPrice"), rs.getInt("status"), rs.getInt("discount"), rs.getDate("DateCheckIn"), rs.getDate("DateCheckOut"));
+                b = new Bill(rs.getInt("id"), rs.getInt("idTable"), rs.getInt("totalPrice"), rs.getInt("status"), rs.getInt("discount"), rs.getDate("DateCheckIn"), rs.getDate("DateCheckOut"), rs.getString("staff"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(CategoryDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -129,7 +129,7 @@ public class BillDao implements BillRepository {
     @Override
     public void updateBill(Bill bill) {
         try {
-            String sql = "update Bill set status = ?,discount=?,totalPrice=?,DateCheckIn=?,DateCheckOut=? where id = ?";
+            String sql = "update Bill set status = ?,discount=?,totalPrice=?,DateCheckIn=?,DateCheckOut=?,staff=? where id = ?";
 
             ps = conn.prepareStatement(sql);
             ps.setInt(1, bill.getStatus());
@@ -137,7 +137,8 @@ public class BillDao implements BillRepository {
             ps.setInt(3, bill.getTotal());
             ps.setDate(4, bill.getCheckin_date());
             ps.setDate(5, bill.getCheckout_date());
-            ps.setInt(6, bill.getId());
+            ps.setString(6, bill.getStaff());
+            ps.setInt(7, bill.getId());
 
             ps.execute();
         } catch (SQLException ex) {
@@ -155,4 +156,52 @@ public class BillDao implements BillRepository {
         return result;
     }
 
+    @Override
+    public List<Bill> findAllBill() {
+        List<Bill> list = new ArrayList();
+        try {
+            String sql = "select * from Bill";
+
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Bill(rs.getInt("id"), rs.getInt("idTable"), rs.getInt("totalPrice"), rs.getInt("status"), rs.getInt("discount"), rs.getDate("DateCheckIn"), rs.getDate("DateCheckOut"), rs.getString("staff")));
+            }
+            return list;
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+
+    @Override
+    public void deleteBill(Bill bill) {
+        try {
+            String sql = "delete from Bill where id = ?";
+
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, bill.getId());
+
+            ps.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public int count() {
+        int n = 0;
+        try {
+            String sql = "select count(*) as count from Bill";
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                n = rs.getInt("count");
+            }
+            return n;
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return n;
+    }
 }
