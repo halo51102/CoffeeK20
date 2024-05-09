@@ -330,7 +330,7 @@ public class HomeAdmin extends javax.swing.JFrame {
         jLabelAccount.setBackground(new java.awt.Color(255, 255, 255));
         jLabelAccount.setOpaque(true);
 
-        jButton1.setText("TÀI KHOẢN");
+        jButton1.setText("TÀI KHOẢN NHÂN VIÊN");
         jButton1.setBorder(null);
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton1.addActionListener(new java.awt.event.ActionListener() {

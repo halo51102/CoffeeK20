@@ -46,6 +46,7 @@ GUI\admin\category\JDialogUpdateCategory.class
 util\DbUtil.class
 GUI\admin\bill\JDialogBillDetail.class
 GUI\admin\HomeAdmin$10.class
+GUI\staff\JDialogChangeTable$Callback.class
 GUI\staff\Login$2.class
 GUI\admin\table\JDialogUpdateTable.class
 GUI\admin\table\JPanelManageTable$3.class
@@ -58,6 +59,7 @@ GUI\admin\category\JDialogUpdateCategory$Callback.class
 GUI\admin\category\JPanelCategory$4.class
 GUI\admin\bill\JPanelBill$2.class
 DTO\Category.class
+GUI\staff\JDialogChangeTable$1.class
 GUI\admin\account\JDialogUpdateAccount$1.class
 GUI\admin\bill\JDialogDeleteBill$Callback.class
 GUI\admin\table\JDialogCreateTable.class
@@ -81,6 +83,7 @@ GUI\admin\account\JPanelAccount$5.class
 GUI\admin\bill\JDialogDeleteBill.class
 GUI\staff\Login$7.class
 GUI\staff\JDialogChangePassword$2.class
+GUI\staff\JDialogChangeTable.class
 GUI\admin\food\JPanelManageFood$6.class
 GUI\admin\HomeAdmin$3.class
 GUI\admin\category\JDialogDeleteCategory.class

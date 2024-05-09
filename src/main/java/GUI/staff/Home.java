@@ -40,7 +40,7 @@ import util.ImageUtil;
  *
  * @author Admin
  */
-public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPanelTable.Callback, JDialogBill.Callback {
+public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPanelTable.Callback, JDialogBill.Callback, JDialogChangeTable.Callback {
     
     CategoryDao categoryDao;
     Category category;
@@ -89,6 +89,18 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
         jLabelTotal.setText(String.valueOf(finalTotal));
         
     }
+
+    @Override
+    public void actionChangeTable(int id_table) {
+        Bill bill2 = billDao.findByIdTale(id_table);
+        bill2.setId_table(bill.getId_table());
+        billDao.updateBill(bill2);
+        
+        bill.setId_table(id_table);
+        billDao.updateBill(bill);      
+        
+        loading();
+    }
     
     public interface CallbackTable {
         
@@ -105,8 +117,8 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
     private void initComponents() {
 
         jPanel4 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jButtonAccountProfile = new javax.swing.JButton();
+        jButtonLogout = new javax.swing.JButton();
         jScrollPaneTable = new javax.swing.JScrollPane();
         jScrollPane5 = new javax.swing.JScrollPane();
         jListCategory = new javax.swing.JList<>();
@@ -131,20 +143,20 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton2.setText("THÔNG TIN CÁ NHÂN");
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+        jButtonAccountProfile.setText("THÔNG TIN CÁ NHÂN");
+        jButtonAccountProfile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonAccountProfile.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonAccountProfileMouseClicked(evt);
             }
         });
 
-        jButton3.setText("ĐĂNG XUẤT");
-        jButton3.setToolTipText("");
-        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+        jButtonLogout.setText("ĐĂNG XUẤT");
+        jButtonLogout.setToolTipText("");
+        jButtonLogout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonLogout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonLogoutMouseClicked(evt);
             }
         });
 
@@ -155,16 +167,16 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
+                    .addComponent(jButtonLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonAccountProfile, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonAccountProfile, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -351,7 +363,7 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
                         .addComponent(jScrollPaneTable, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(7, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(4, 4, 4)
                         .addComponent(jLabel2)
@@ -433,24 +445,36 @@ public class Home extends javax.swing.JFrame implements JPanelFood.Callback, JPa
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        JDialogAccountProfile d = new JDialogAccountProfile(this, true, account);
-        d.setVisible(true);
+//        JDialogAccountProfile d = new JDialogAccountProfile(this, true, account);
+//        d.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+//        this.dispose();
+//        new Login().setVisible(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButtonAccountProfileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonAccountProfileMouseClicked
+        // TODO add your handling code here:
+        JDialogAccountProfile a = new JDialogAccountProfile(this, true, account);
+        a.setVisible(true);
+    }//GEN-LAST:event_jButtonAccountProfileMouseClicked
+
+    private void jButtonLogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonLogoutMouseClicked
+        // TODO add your handling code here:
         this.dispose();
         new Login().setVisible(true);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_jButtonLogoutMouseClicked
 
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButtonAccountProfile;
     private javax.swing.JButton jButtonCheckOut;
+    private javax.swing.JButton jButtonLogout;
     private javax.swing.JButton jButtonReOrder;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
