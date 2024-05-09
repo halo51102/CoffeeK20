@@ -8,6 +8,7 @@ GUI\admin\category\JPanelCategory$2.class
 GUI\admin\account\JDialogDeleteAccount$Callback.class
 repository\BillRepository.class
 GUI\admin\table\JPanelManageTable$2.class
+GUI\admin\bill\JDialogSearchBill$1.class
 GUI\admin\table\JDialogCreateTable$Callback.class
 GUI\staff\JDialogAccountProfile.class
 com\coffeek20\CoffeeK20.class
@@ -49,6 +50,7 @@ GUI\staff\Login$2.class
 GUI\admin\table\JDialogUpdateTable.class
 GUI\admin\table\JPanelManageTable$3.class
 GUI\admin\bill\JDialogDeleteBill$1.class
+GUI\admin\bill\JDialogSearchBill$Callback.class
 GUI\staff\Home$6.class
 GUI\admin\food\JPanelManageFood$5.class
 GUI\admin\category\JDialogUpdateCategory$1.class
@@ -122,6 +124,7 @@ GUI\admin\category\JPanelCategory.class
 GUI\admin\HomeAdmin$1.class
 com\coffeek20\CoffeeK20$1.class
 GUI\admin\category\JDialogCreateCategory$Callback.class
+GUI\admin\bill\JDialogSearchBill.class
 GUI\admin\HomeAdmin$CallbackTable.class
 GUI\staff\JDialogAccountProfile$1.class
 GUI\admin\HomeAdmin$9.class

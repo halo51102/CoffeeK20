@@ -43,6 +43,7 @@ public class JDialogBill extends javax.swing.JDialog {
         accountDao = new AccountDao();
         foodDao = new FoodDao();
         this.callback = callback;
+        this.setTitle("Bill");
 
         loading();
     }

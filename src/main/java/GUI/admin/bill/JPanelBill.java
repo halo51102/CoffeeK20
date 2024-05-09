@@ -21,7 +21,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Admin
  */
-public class JPanelBill extends javax.swing.JPanel implements JDialogUpdateBill.Callback, JDialogDeleteBill.Callback {
+public class JPanelBill extends javax.swing.JPanel implements JDialogUpdateBill.Callback, JDialogDeleteBill.Callback, JDialogSearchBill.Callback {
 
     Bill bill;
     List<Bill> list;
@@ -41,8 +41,9 @@ public class JPanelBill extends javax.swing.JPanel implements JDialogUpdateBill.
         this.parent = parent;
         bDao = new BillDao();
         tDao = new TableDao();
+        list = bDao.findAllBill();
 
-        loading();
+        loading(list);
     }
 
     /**
@@ -200,45 +201,13 @@ public class JPanelBill extends javax.swing.JPanel implements JDialogUpdateBill.
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
         // TODO add your handling code here:
-        loading();
+        loading(list);
     }//GEN-LAST:event_jLabel4MouseClicked
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         // TODO add your handling code here
-        list = bDao.findAllBill();
-        jTable1.removeAll();
-        String columns[] = {"STT", "BÀN", "% GIẢM GIÁ", "TỔNG TIỀN", "TRẠNG THÁI", "NHÂN VIÊN", "NGÀY XUẤT"};
-        DefaultTableModel dtm = new DefaultTableModel(columns, 0);
-
-        if (!list.isEmpty()) {
-            list.forEach(obj -> {
-                dtm.addRow(new Object[]{"STT",
-                    tDao.findById(obj.getId_table()).getName(),
-                    obj.getDiscount(),
-                    obj.getTotal(),
-                    obj.getStatus() == 1 ? "Đã thanh toán" : "Chưa thanh toán",
-                    obj.getStaff(),
-                    obj.getCheckout_date() != null ? obj.getCheckout_date().toString() : ""
-                });
-            });
-            for (int i = 0; i < dtm.getRowCount(); i++) {
-                dtm.setValueAt(i + 1, i, 0);
-            }
-
-            jTable1.getSelectionModel().addListSelectionListener((ListSelectionEvent lse) -> {
-                int position = jTable1.getSelectedRow();
-                if (position >= 0) {
-                    bill = list.get(position);
-                }
-
-            });
-
-            jTable1.changeSelection(0, 0, false, false);
-
-            jTable1.setModel(dtm);
-        } else {
-            JOptionPane.showMessageDialog(this, "Không tồn tại danh mục cần tìm");
-        }
+        JDialogSearchBill a = new JDialogSearchBill(parent, true, this);
+        a.setVisible(true);
     }//GEN-LAST:event_jLabel3MouseClicked
 
 
@@ -252,8 +221,7 @@ public class JPanelBill extends javax.swing.JPanel implements JDialogUpdateBill.
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 
-    private void loading() {
-        list = bDao.findAllBill();
+    private void loading(List<Bill> list) {
         jTable1.removeAll();
         String columns[] = {"STT", "BÀN", "% GIẢM GIÁ", "TỔNG TIỀN", "TRẠNG THÁI", "NHÂN VIÊN", "NGÀY XUẤT"};
         DefaultTableModel dtm = new DefaultTableModel(columns, 0);
@@ -289,12 +257,17 @@ public class JPanelBill extends javax.swing.JPanel implements JDialogUpdateBill.
 
     @Override
     public void actionUpdateBill() {
-        loading();
+        loading(list);
     }
 
     @Override
     public void actionDeleteBill() {
-        loading();
+        loading(list);
+    }
+
+    @Override
+    public void actionSearchBill(List<Bill> bList) {
+        loading(bList);
     }
 
 }

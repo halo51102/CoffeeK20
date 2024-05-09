@@ -160,7 +160,7 @@ public class BillDao implements BillRepository {
     public List<Bill> findAllBill() {
         List<Bill> list = new ArrayList();
         try {
-            String sql = "select * from Bill";
+            String sql = "select * from Bill order by status desc";
 
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -203,5 +203,27 @@ public class BillDao implements BillRepository {
             Logger.getLogger(AccountDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return n;
+    }
+
+    @Override
+    public List<Bill> findByStatus(int status, List<Bill> list) {
+        List<Bill> result = new ArrayList();
+        for (Bill item : list) {
+            if (item.getStatus() == status) {
+                result.add(item);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<Bill> findByStaff(String username, List<Bill> list) {
+        List<Bill> result = new ArrayList();
+        for (Bill item : list) {
+            if (item.getStaff() != null && item.getStaff().equals(username)) {
+                result.add(item);
+            }
+        }
+        return result;
     }
 }

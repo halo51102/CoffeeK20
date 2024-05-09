@@ -198,12 +198,16 @@ public class Login extends javax.swing.JFrame {
         if (a != null) {
             account = accountDao.login(jTextField1.getText().trim(), jPasswordField2.getText().trim());
             if (account != null) {
-                if (account.getType() == 0) {
-                    new Home(this, account).setVisible(true);
-                    this.setVisible(false);
+                if (account.getStatus() != 0) {
+                    if (account.getType() == 0) {
+                        new Home(this, account).setVisible(true);
+                        this.setVisible(false);
+                    } else {
+                        new HomeAdmin(this, account).setVisible(true);
+                        this.setVisible(false);
+                    }
                 } else {
-                    new HomeAdmin(this, account).setVisible(true);
-                    this.setVisible(false);
+                    JOptionPane.showMessageDialog(this, "Tài khoản đã bị khóa", "Thông báo", 1);
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Mật khẩu không chính xác", "Thông báo", 1);
