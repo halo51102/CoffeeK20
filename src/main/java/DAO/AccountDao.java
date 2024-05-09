@@ -134,7 +134,7 @@ public class AccountDao implements AccountRepository {
     @Override
     public void create(Account account) {
         try {
-            String sql = "insert into Account values(?,?,?,?,?)";
+            String sql = "insert into Account(UserName,DisplayName, PassWord, Type, status) values(?,?,?,?,?)";
 
             ps = conn.prepareStatement(sql);
             ps.setString(1, account.getUsername());

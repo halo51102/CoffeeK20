@@ -35,4 +35,8 @@ public interface BillRepository {
     void deleteBill(Bill bill);
 
     int count();
+
+    List<Bill> findByStatus(int status, List<Bill> list);
+
+    List<Bill> findByStaff(String username, List<Bill> list);
 }
