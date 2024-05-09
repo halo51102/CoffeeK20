@@ -43,7 +43,7 @@ public class JPanelBill extends javax.swing.JPanel implements JDialogUpdateBill.
         tDao = new TableDao();
         list = bDao.findAllBill();
 
-        loading(list);
+        loading();
     }
 
     /**
@@ -201,7 +201,7 @@ public class JPanelBill extends javax.swing.JPanel implements JDialogUpdateBill.
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
         // TODO add your handling code here:
-        loading(list);
+        loading();
     }//GEN-LAST:event_jLabel4MouseClicked
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
@@ -221,7 +221,8 @@ public class JPanelBill extends javax.swing.JPanel implements JDialogUpdateBill.
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 
-    private void loading(List<Bill> list) {
+    private void loading() {
+        list = bDao.findAllBill();
         jTable1.removeAll();
         String columns[] = {"STT", "BÀN", "% GIẢM GIÁ", "TỔNG TIỀN", "TRẠNG THÁI", "NHÂN VIÊN", "NGÀY XUẤT"};
         DefaultTableModel dtm = new DefaultTableModel(columns, 0);
@@ -257,17 +258,47 @@ public class JPanelBill extends javax.swing.JPanel implements JDialogUpdateBill.
 
     @Override
     public void actionUpdateBill() {
-        loading(list);
+        loading();
     }
 
     @Override
     public void actionDeleteBill() {
-        loading(list);
+        loading();
     }
 
     @Override
     public void actionSearchBill(List<Bill> bList) {
-        loading(bList);
+        jTable1.removeAll();
+        String columns[] = {"STT", "BÀN", "% GIẢM GIÁ", "TỔNG TIỀN", "TRẠNG THÁI", "NHÂN VIÊN", "NGÀY XUẤT"};
+        DefaultTableModel dtm = new DefaultTableModel(columns, 0);
+
+        if (!bList.isEmpty()) {
+            bList.forEach(obj -> {
+                dtm.addRow(new Object[]{"STT",
+                    tDao.findById(obj.getId_table()).getName(),
+                    obj.getDiscount(),
+                    obj.getTotal(),
+                    obj.getStatus() == 1 ? "Đã thanh toán" : "Chưa thanh toán",
+                    obj.getStaff(),
+                    obj.getCheckout_date() != null ? obj.getCheckout_date().toString() : ""
+                });
+            });
+            for (int i = 0; i < dtm.getRowCount(); i++) {
+                dtm.setValueAt(i + 1, i, 0);
+            }
+
+            jTable1.getSelectionModel().addListSelectionListener((ListSelectionEvent lse) -> {
+                int position = jTable1.getSelectedRow();
+                if (position >= 0) {
+                    bill = bList.get(position);
+                }
+
+            });
+
+            jTable1.changeSelection(0, 0, false, false);
+
+            jTable1.setModel(dtm);
+        }
     }
 
 }

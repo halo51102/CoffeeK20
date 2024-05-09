@@ -108,7 +108,6 @@ public class JDialogDeleteBill extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        bill.setStatus(0);
         try {
             billDao.deleteBill(bill);
             JOptionPane.showMessageDialog(this, "Xóa hóa đơn thành công");
